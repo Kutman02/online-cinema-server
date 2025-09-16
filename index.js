@@ -1,31 +1,14 @@
-// server/index.js
-const express = require('express');
-const fs = require('fs');
-const cors = require('cors');
+import movies from '../movies.json';
 
-const app = express();
-app.use(cors());
-
-const PORT = 9000;
-
-// Чтение JSON файла
-const getMoviesData = () => {
-  const data = fs.readFileSync('./movies.json', 'utf8');
-  return JSON.parse(data);
-};
-
-app.get('/api/movies', (req, res) => {
+export default function handler(req, res) {
+  let data = movies;
   const { search } = req.query;
-  let movies = getMoviesData();
 
   if (search) {
-    // Фильтрация по первой букве
-    movies = movies.filter(movie => movie.Title.toLowerCase().startsWith(search.toLowerCase()));
+    data = movies.filter(movie =>
+      movie.Title.toLowerCase().startsWith(search.toLowerCase())
+    );
   }
 
-  res.json({ Search: movies });
-});
-
-app.listen(PORT, () => {
-  console.log(`Сервер запущен на http://localhost:${PORT}`);
-});
+  res.status(200).json({ Search: data });
+}
