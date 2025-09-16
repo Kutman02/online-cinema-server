@@ -1,4 +1,4 @@
-import movies from '../movies.json';
+import movies from './movies.json';
 
 export default function handler(req, res) {
   let data = movies;
